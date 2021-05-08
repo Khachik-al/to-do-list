@@ -1,0 +1,20 @@
+.inputContainer{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.deleteButton{
+    font-size: 30px;
+}
+.task{
+    margin-top: 10px;
+}
+.input{
+    width: 50%;
+    font-size: 30px;
+}
+
+
+    

@@ -1,28 +1,16 @@
-import User from './User'
+import React from 'react';
 import './App.css';
+import ToDo from './components/ToDo/ToDo';
+import 'bootstrap';
+
+
+
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-
-<User 
-name='John' 
-surname='Armstrong' 
-age='15'/>
-
-<User 
-name='Jack' 
-surname='Doe' 
-age='45'/>
-
-<User 
-name='Sarah' 
-
-age='18'/>
-
-
-      </header>
+      <ToDo />
     </div>
   );
 }

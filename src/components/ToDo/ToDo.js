@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import styles from './style.module.css'
-import { Container, Col, Row, Card, FormControl, Button, InputGroup } from 'react-bootstrap'
+// import styles from './style.module.css'
+import { Container, Col, Row, Button } from 'react-bootstrap'
 import idGenerator from '../../helpers/idGenerator'
+import Task from '../Task/Task'
+import TaskInput from '../inputTask/TaskInput'
 
 
 class ToDo extends Component {
@@ -42,19 +44,12 @@ class ToDo extends Component {
     }
     selectTasks = (taskId) => {
         let selectedTasksId = new Set(this.state.selectedTasksId)
-        if (selectedTasksId.has(taskId)) {
-            selectedTasksId.delete(taskId)
-        }
-        else {
-            selectedTasksId.add(taskId)
-        }
+        selectedTasksId.has(taskId) ? selectedTasksId.delete(taskId) : selectedTasksId.add(taskId);
         this.setState({
             selectedTasksId
         });
     };
-    deleteTasks = () => {
-        // if(!this.state.selectedTasksId){return}
-        // this.state.selectedTasksId.forEach((el)=>this.deleteTask(el))??
+    deleteSelectedTasks = () => {
         let { selectedTasksId, tasks } = this.state;
         let newTasks = tasks.filter((task) => {
             if (selectedTasksId.has(task._id)) {
@@ -73,49 +68,30 @@ class ToDo extends Component {
         const { tasks, inputValue, selectedTasksId } = this.state;
         const taskComponents = tasks.map((task) => {
             return (
-                <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <Card className={`${styles.task} mt-3`}>
-                        <Card.Body>
-                            <input type="checkbox" style={{ transform: 'scale(1.3)' }}
-                                onChange={() => { this.selectTasks(task._id) }}
-                            />
-                            <Card.Title className='mt-1'>{task.title}</Card.Title>
-                            <Card.Text>
-
-                            </Card.Text>
-                            <Button variant="warning">Edit</Button>
-                            <Button
-                                variant="danger"
-                                onClick={() => this.deleteTask(task._id)}
-                            >Delete</Button>
-                        </Card.Body>
-                    </Card>
+                <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={3}>
+                    <Task
+                        data={task}
+                        selectTasks={this.selectTasks}
+                        deleteTask={this.deleteTask} />
                 </Col>
             )
         })
-
         return (
             <Container >
                 <Row className='justify-content-center'>
                     <Col className='col-10'>
-                        <InputGroup className="mb-3 mt-4">
-                            <FormControl
-                                type="text" onChange={this.handleChenge} value={inputValue}
-                                className={styles.input} onKeyDown={this.addTaskKyeDown}
-                                placeholder="Input new task" disabled={selectedTasksId.size}
-                            />
-                            <InputGroup.Append>
-                                <Button
-                                    onClick={this.addTask} style={{ fontSize: '20px' }}
-                                    variant="outline-primary" disabled={selectedTasksId.size}>Add task</Button>
-                            </InputGroup.Append>
-                        </InputGroup>
+                        <TaskInput
+                            inputValue={inputValue}
+                            selectedTasksId={selectedTasksId}
+                            handleChenge={this.handleChenge}
+                            addTask={this.addTask}
+                            addTaskKyeDown={this.addTaskKyeDown} />
                     </Col>
                 </Row>
                 <Row className='justify-content-center text-center'>
                     <Col xs={6}>
-                        <Button variant="outline-danger" onClick={this.deleteTasks}
-                            disabled={!selectedTasksId.size}>Delete Tasks</Button>
+                        <Button variant="outline-danger" onClick={this.deleteSelectedTasks}
+                            disabled={!selectedTasksId.size}>Delete selected tasks</Button>
                     </Col>
                 </Row>
                 <Row className='justify-content-center'>

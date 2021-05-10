@@ -74,7 +74,7 @@ class ToDo extends Component {
         const taskComponents = tasks.map((task) => {
             return (
                 <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={2}>
-                    <Card className={`${styles.task} mt-2`}>
+                    <Card className={`${styles.task} mt-3`}>
                         <Card.Body>
                             <input type="checkbox" style={{ transform: 'scale(1.3)' }}
                                 onChange={() => { this.selectTasks(task._id) }}

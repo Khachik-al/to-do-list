@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Card, Button } from 'react-bootstrap'
-import styles from './taskStyle.module.css'
+import { Card, Button } from 'react-bootstrap';
+import styles from './taskStyle.module.css';
+import PropTypes from 'prop-types';
 
 class Task extends Component {
+
+
     state = {
         selected: false
     }
@@ -37,5 +40,11 @@ class Task extends Component {
         )
     }
 }
+
+Task.propTypes = {
+    data: PropTypes.object.isRequired,
+    selectTasks: PropTypes.func.isRequired,
+    deleteTask: PropTypes.func.isRequired,
+};
 
 export default Task;

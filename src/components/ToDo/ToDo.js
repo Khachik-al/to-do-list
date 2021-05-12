@@ -1,33 +1,23 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 // import styles from './style.module.css'
-import { Container, Col, Row, Button } from 'react-bootstrap'
-import idGenerator from '../../helpers/idGenerator'
-import Task from '../Task/Task'
-import TaskInput from '../inputTask/TaskInput'
+import { Container, Col, Row, Button } from 'react-bootstrap';
+import Task from '../Task/Task';
+import TaskInput from '../inputTask/TaskInput';
+import Confirm from '../Confirm';
 
 
 class ToDo extends Component {
     state = {
-        inputValue: '',
         tasks: [],
-        selectedTasksId: new Set()
+        selectedTasksId: new Set(),
+        showModal: false
     }
-    handleChenge = (ev) => {
-        this.setState({
-            inputValue: ev.target.value
-        })
-    }
-    addTask = () => {
-        let inputValue = this.state.inputValue.trim();
-        if (!inputValue) { return; }
-        const newTask = {
-            title: this.state.inputValue,
-            _id: idGenerator()
-        }
+
+
+    onAdd = (newTask) => {
         let tasks = [...this.state.tasks, newTask];
         this.setState({
             tasks,
-            inputValue: ''
         })
     }
     deleteTask = (taskId) => {
@@ -37,10 +27,6 @@ class ToDo extends Component {
             tasks: this.state.tasks.filter((el) => taskId !== el._id),
             selectedTasksId: newSet
         })
-    }
-    addTaskKyeDown = (ev) => {
-        if (ev.key !== 'Enter') { return; }
-        this.addTask()
     }
     selectTasks = (taskId) => {
         let selectedTasksId = new Set(this.state.selectedTasksId)
@@ -59,13 +45,19 @@ class ToDo extends Component {
         })
         this.setState({
             tasks: newTasks,
+            showModal: !this.state.showModal,
             selectedTasksId: new Set()
         })
 
     }
+    onToggleCloseModal = () => {
+        this.setState({
+            showModal: !this.state.showModal
+        })
+    }
 
     render() {
-        const { tasks, inputValue, selectedTasksId } = this.state;
+        const { tasks, selectedTasksId, showModal } = this.state;
         const taskComponents = tasks.map((task) => {
             return (
                 <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={3}>
@@ -76,28 +68,35 @@ class ToDo extends Component {
                 </Col>
             )
         })
+
         return (
-            <Container >
-                <Row className='justify-content-center'>
-                    <Col className='col-10'>
-                        <TaskInput
-                            inputValue={inputValue}
-                            selectedTasksId={selectedTasksId}
-                            handleChenge={this.handleChenge}
-                            addTask={this.addTask}
-                            addTaskKyeDown={this.addTaskKyeDown} />
-                    </Col>
-                </Row>
-                <Row className='justify-content-center text-center'>
-                    <Col xs={6}>
-                        <Button variant="outline-danger" onClick={this.deleteSelectedTasks}
-                            disabled={!selectedTasksId.size}>Delete selected tasks</Button>
-                    </Col>
-                </Row>
-                <Row className='justify-content-center'>
-                    {taskComponents}
-                </Row>
-            </Container>
+            <div>
+                <Container >
+                    <Row className='justify-content-center'>
+                        <Col className='col-10'>
+                            <TaskInput
+                                onAdd={this.onAdd}
+                                selectedTasksId={selectedTasksId} />
+                        </Col>
+                    </Row>
+                    <Row className='justify-content-center text-center'>
+                        <Col xs={6}>
+                            <Button variant="outline-danger" onClick={this.onToggleCloseModal}
+                                disabled={!selectedTasksId.size}>Delete selected tasks</Button>
+                        </Col>
+                    </Row>
+                    <Row className='justify-content-center'>
+                        {taskComponents}
+                    </Row>
+                </Container>
+                {showModal &&
+                    <Confirm
+                        onClose={this.onToggleCloseModal}
+                        count={selectedTasksId.size}
+                        onConfirm={this.deleteSelectedTasks}
+                    />
+                }
+            </div>
         );
     }
 }

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import styles from './styleInputGroup.module.css';
+import { FormControl, Button, Modal } from 'react-bootstrap';
+// import styles from './styleInputGroup.module.css';
 import idGenerator from '../../helpers/idGenerator';
 import PropTypes from 'prop-types';
 
 class TaskInput extends Component {
 
     static propTypes = {
-        selectedTasksId: PropTypes.object.isRequired,
         onAdd: PropTypes.func.isRequired
     };
 
@@ -16,9 +15,10 @@ class TaskInput extends Component {
         description: ''
     };
 
-    handleChenge = (ev) => {
+    handleChenge = (event) => {
+        let {value,name}=event.target;
         this.setState({
-            title: ev.target.value
+            [name]: value
         })
     };
     addTask = () => {
@@ -31,9 +31,7 @@ class TaskInput extends Component {
             _id: idGenerator()
         }
         this.props.onAdd(newTask)
-        this.setState({
-            title: ''
-        })
+        
     }
     addTaskKyeDown = (ev) => {
         if (ev.key !== 'Enter') { return; }
@@ -42,21 +40,41 @@ class TaskInput extends Component {
 
     render() {
         let { title } = this.state;
-        const { selectedTasksId } = this.props
+        const { onClose } = this.props
         return (
-            <InputGroup className="mb-3 mt-4">
-                <FormControl
-                    type="text" onChange={this.handleChenge} value={title}
-                    className={styles.input}
-                    onKeyDown={this.addTaskKyeDown}
-                    placeholder="Input new task" disabled={selectedTasksId.size}
-                />
-                <InputGroup.Append>
-                    <Button
-                        onClick={this.addTask} style={{ fontSize: '20px' }}
-                        variant="outline-primary" disabled={selectedTasksId.size}>Add task</Button>
-                </InputGroup.Append>
-            </InputGroup>
+            <>
+            <Modal
+            show={true}
+            onHide={onClose}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                  Add new task
+                </Modal.Title>
+            </Modal.Header>
+           <Modal.Body>
+            <FormControl
+                type="text" onChange={this.handleChenge} value={title}
+                onKeyPress={this.addTaskKyeDown}
+                name="title"
+                placeholder="Title" 
+                className="mb-3"
+            />
+            <FormControl
+                as="textarea" rows={5} name='description'
+                onChange={this.handleChenge} placeholder='description'
+            />
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant='success' onClick={this.addTask}>Add</Button>
+                <Button onClick={onClose}>Cencel</Button>
+            </Modal.Footer>
+        </Modal>
+           
+            </>
         )
     }
 }

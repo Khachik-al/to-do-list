@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import styles from './style.module.css'
+import styles from './style.module.css'
 import { Container, Col, Row, Button } from 'react-bootstrap';
 import Task from '../Task/Task';
 import TaskInput from '../inputTask/TaskInput';
 import Confirm from '../Confirm';
+import EditTask from '../EditTask/EditTask';
 
 
 class ToDo extends Component {
@@ -11,7 +12,9 @@ class ToDo extends Component {
         tasks: [],
         selectedTasksId: new Set(),
         showModal: false,
-        showAddTaskModal: false
+        showAddTaskModal: false,
+        editingTask: null,
+        showEditTaskModal: false
     }
 
     onAdd = (newTask) => {
@@ -26,7 +29,8 @@ class ToDo extends Component {
         newSet.delete(taskId);
         this.setState({
             tasks: this.state.tasks.filter((el) => taskId !== el._id),
-            selectedTasksId: newSet
+            selectedTasksId: newSet,
+            editingTask: null
         })
     }
     selectTasks = (taskId) => {
@@ -70,18 +74,46 @@ class ToDo extends Component {
             })
         }
     }
-    toggleOpenNewTaskModal=()=>{
+    toggleOpenNewTaskModal = () => {
         this.setState({
-            showAddTaskModal:!this.state.showAddTaskModal
+            showAddTaskModal: !this.state.showAddTaskModal
+        })
+    }
+    toggleOpenEditTaskModal = () => {
+        this.setState({
+            showEditTaskModal: !this.state.showEditTaskModal
+        })
+    }
+    editTask = (task) => {
+        this.setState({
+            editingTask: task,
+            showEditTaskModal: true
+        })
+    }
+    onEdit = (editedTask) => {
+        let tasks = this.state.tasks.map((el) => {
+            if (el._id === editedTask._id){
+              return {
+               ...editedTask
+              } 
+                
+            }
+            return el;
+        })
+        this.setState({
+            tasks,
+            showEditTaskModal: !this.state.showEditTaskModal,
+            editingTask:null
         })
     }
 
     render() {
-        const { tasks, selectedTasksId, showModal, showAddTaskModal } = this.state;
+        const { tasks, selectedTasksId, showModal, showAddTaskModal, showEditTaskModal } = this.state;
         const taskComponents = tasks.map((task) => {
             return (
                 <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={3}>
                     <Task
+                        editTask={this.editTask}
                         data={task}
                         selectTasks={this.selectTasks}
                         deleteTask={this.deleteTask}
@@ -95,31 +127,31 @@ class ToDo extends Component {
             <div>
                 <h2>To Do List</h2>
                 <Container >
-                    <Row className='justify-content-center text-center'>
-                        <Col xs={4}>
-                            <Button
-                                onClick={this.toggleOpenNewTaskModal}
-                                variant="primary"
-                            >Add task</Button>
-                        </Col>
-
-                    </Row>
-                    {tasks.length ?
-                        <Row className='justify-content-center text-center'>
-
-                            <Col xs={5}>
-                                <Button variant="outline-danger" onClick={this.onToggleCloseModal}
+                    <Row className='justify-content-center '>
+                        {tasks.length ?
+                            <Col xs={4} className={styles.deleteSelectedButton}>
+                                <Button variant="danger" onClick={this.onToggleCloseModal}
                                     disabled={!selectedTasksId.size}>Delete selected</Button>
                             </Col>
-                            <Col xs={5}>
-                                <Button variant="outline-warning" onClick={this.onSelectAll}
+                            : null
+                        }
+                        <Col xs={4} className='text-center'>
+                            <Button
+                                onClick={this.toggleOpenNewTaskModal}
+                                variant="primary" disabled={!!selectedTasksId.size}
+                            >Add task</Button>
+                        </Col>
+                        {tasks.length ?
+                            <Col xs={4}>
+                                <Button variant="warning" onClick={this.onSelectAll}
                                 >{selectedTasksId.size === tasks.length ? "Deselect All" : "Selecte All"}
                                 </Button>
                             </Col>
+                            : null
+                        }
 
-                        </Row>
-                        : null
-                    }
+                    </Row>
+
                     <Row className='justify-content-center'>
                         {taskComponents}
                     </Row>
@@ -133,8 +165,15 @@ class ToDo extends Component {
                 }
                 {showAddTaskModal &&
                     <TaskInput
-                    onAdd={this.onAdd}
-                    onClose={this.toggleOpenNewTaskModal}
+                        onAdd={this.onAdd}
+                        onClose={this.toggleOpenNewTaskModal}
+                    />
+                }
+                {showEditTaskModal &&
+                    <EditTask
+                        onEdit={this.onEdit}
+                        editingTask={this.state.editingTask}
+                        onClose={this.toggleOpenEditTaskModal}
                     />
                 }
             </div>

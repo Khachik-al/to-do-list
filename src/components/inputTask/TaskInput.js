@@ -16,7 +16,7 @@ class TaskInput extends Component {
     };
 
     handleChenge = (event) => {
-        let {value,name}=event.target;
+        let { value, name } = event.target;
         this.setState({
             [name]: value
         })
@@ -31,7 +31,7 @@ class TaskInput extends Component {
             _id: idGenerator()
         }
         this.props.onAdd(newTask)
-        
+
     }
     addTaskKyeDown = (ev) => {
         if (ev.key !== 'Enter') { return; }
@@ -42,39 +42,36 @@ class TaskInput extends Component {
         let { title } = this.state;
         const { onClose } = this.props
         return (
-            <>
             <Modal
-            show={true}
-            onHide={onClose}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                  Add new task
+                show={true}
+                onHide={onClose}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Add new task
                 </Modal.Title>
-            </Modal.Header>
-           <Modal.Body>
-            <FormControl
-                type="text" onChange={this.handleChenge} value={title}
-                onKeyPress={this.addTaskKyeDown}
-                name="title"
-                placeholder="Title" 
-                className="mb-3"
-            />
-            <FormControl
-                as="textarea" rows={5} name='description'
-                onChange={this.handleChenge} placeholder='description'
-            />
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant='success' onClick={this.addTask}>Add</Button>
-                <Button onClick={onClose}>Cencel</Button>
-            </Modal.Footer>
-        </Modal>
-           
-            </>
+                </Modal.Header>
+                <Modal.Body>
+                    <FormControl
+                        type="text" onChange={this.handleChenge} value={title}
+                        onKeyPress={this.addTaskKyeDown}
+                        name="title"
+                        placeholder="Title"
+                        className="mb-3"
+                    />
+                    <FormControl
+                        as="textarea" rows={5} name='description'
+                        onChange={this.handleChenge} placeholder='description'
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='success' onClick={this.addTask}>Add</Button>
+                    <Button onClick={onClose}>Cencel</Button>
+                </Modal.Footer>
+            </Modal>
         )
     }
 }

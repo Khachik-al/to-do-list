@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
-// import styles from './style.module.css'
+import styles from './style.module.css'
 import { Container, Col, Row, Button } from 'react-bootstrap';
 import Task from '../Task/Task';
 import TaskInput from '../inputTask/TaskInput';
 import Confirm from '../Confirm';
+import EditTask from '../EditTask/EditTask';
 
 
 class ToDo extends Component {
     state = {
         tasks: [],
         selectedTasksId: new Set(),
-        showModal: false
+        showModal: false,
+        showAddTaskModal: false,
+        editingTask: null,
+        showEditTaskModal: false
     }
-
 
     onAdd = (newTask) => {
         let tasks = [...this.state.tasks, newTask];
         this.setState({
             tasks,
+            showAddTaskModal: false
         })
     }
     deleteTask = (taskId) => {
@@ -25,7 +29,8 @@ class ToDo extends Component {
         newSet.delete(taskId);
         this.setState({
             tasks: this.state.tasks.filter((el) => taskId !== el._id),
-            selectedTasksId: newSet
+            selectedTasksId: newSet,
+            editingTask: null
         })
     }
     selectTasks = (taskId) => {
@@ -56,35 +61,97 @@ class ToDo extends Component {
         })
     }
 
+    onSelectAll = () => {
+        if (this.state.selectedTasksId.size === this.state.tasks.length) {
+            this.setState({
+                selectedTasksId: new Set()
+            })
+        }
+        else {
+            let selectedTasks = this.state.tasks.map((task) => task._id)
+            this.setState({
+                selectedTasksId: new Set(selectedTasks)
+            })
+        }
+    }
+    toggleOpenNewTaskModal = () => {
+        this.setState({
+            showAddTaskModal: !this.state.showAddTaskModal
+        })
+    }
+    toggleOpenEditTaskModal = () => {
+        this.setState({
+            showEditTaskModal: !this.state.showEditTaskModal
+        })
+    }
+    editTask = (task) => {
+        this.setState({
+            editingTask: task,
+            showEditTaskModal: true
+        })
+    }
+    onEdit = (editedTask) => {
+        let tasks = this.state.tasks.map((el) => {
+            if (el._id === editedTask._id){
+              return {
+               ...editedTask
+              } 
+                
+            }
+            return el;
+        })
+        this.setState({
+            tasks,
+            showEditTaskModal: !this.state.showEditTaskModal,
+            editingTask:null
+        })
+    }
+
     render() {
-        const { tasks, selectedTasksId, showModal } = this.state;
+        const { tasks, selectedTasksId, showModal, showAddTaskModal, showEditTaskModal } = this.state;
         const taskComponents = tasks.map((task) => {
             return (
                 <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={3}>
                     <Task
+                        editTask={this.editTask}
                         data={task}
                         selectTasks={this.selectTasks}
-                        deleteTask={this.deleteTask} />
+                        deleteTask={this.deleteTask}
+                        selected={selectedTasksId.has(task._id)}
+                    />
                 </Col>
             )
         })
 
         return (
             <div>
+                <h2>To Do List</h2>
                 <Container >
-                    <Row className='justify-content-center'>
-                        <Col className='col-10'>
-                            <TaskInput
-                                onAdd={this.onAdd}
-                                selectedTasksId={selectedTasksId} />
+                    <Row className='justify-content-center '>
+                        {tasks.length ?
+                            <Col xs={4} className={styles.deleteSelectedButton}>
+                                <Button variant="danger" onClick={this.onToggleCloseModal}
+                                    disabled={!selectedTasksId.size}>Delete selected</Button>
+                            </Col>
+                            : null
+                        }
+                        <Col xs={4} className='text-center'>
+                            <Button
+                                onClick={this.toggleOpenNewTaskModal}
+                                variant="primary" disabled={!!selectedTasksId.size}
+                            >Add task</Button>
                         </Col>
+                        {tasks.length ?
+                            <Col xs={4}>
+                                <Button variant="warning" onClick={this.onSelectAll}
+                                >{selectedTasksId.size === tasks.length ? "Deselect All" : "Selecte All"}
+                                </Button>
+                            </Col>
+                            : null
+                        }
+
                     </Row>
-                    <Row className='justify-content-center text-center'>
-                        <Col xs={6}>
-                            <Button variant="outline-danger" onClick={this.onToggleCloseModal}
-                                disabled={!selectedTasksId.size}>Delete selected tasks</Button>
-                        </Col>
-                    </Row>
+
                     <Row className='justify-content-center'>
                         {taskComponents}
                     </Row>
@@ -94,6 +161,19 @@ class ToDo extends Component {
                         onClose={this.onToggleCloseModal}
                         count={selectedTasksId.size}
                         onConfirm={this.deleteSelectedTasks}
+                    />
+                }
+                {showAddTaskModal &&
+                    <TaskInput
+                        onAdd={this.onAdd}
+                        onClose={this.toggleOpenNewTaskModal}
+                    />
+                }
+                {showEditTaskModal &&
+                    <EditTask
+                        onEdit={this.onEdit}
+                        editingTask={this.state.editingTask}
+                        onClose={this.toggleOpenEditTaskModal}
                     />
                 }
             </div>

@@ -14,12 +14,13 @@ function Confirm(props) {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Are You sure to close {props.count} task{props.count > 1 ? 's' : ''}
+                    Are You sure to delete {props.count} task{props.count > 1 ? 's' : ''}
                 </Modal.Title>
             </Modal.Header>
             <Modal.Footer>
                 <Button variant='danger' onClick={props.onConfirm}>Delete</Button>
-                <Button onClick={props.onHide}>Close</Button>
+                {//<Button onClick={props.onClose}>Close</Button>
+                }
             </Modal.Footer>
         </Modal>
     );

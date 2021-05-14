@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormControl, Button, Modal } from 'react-bootstrap';
 
 
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 class EditTask extends Component {
 
@@ -79,6 +79,12 @@ class EditTask extends Component {
         )
     }
 }
+
+EditTask.propTypes = {
+    onEdit: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    editingTask: PropTypes.object.isRequired
+};
 
 
 export default EditTask;

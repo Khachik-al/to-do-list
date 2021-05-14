@@ -14,7 +14,7 @@ class ToDo extends Component {
         showModal: false,
         showAddTaskModal: false,
         editingTask: null,
-        showEditTaskModal: false
+        
     }
 
     onAdd = (newTask) => {
@@ -81,13 +81,12 @@ class ToDo extends Component {
     }
     toggleOpenEditTaskModal = () => {
         this.setState({
-            showEditTaskModal: !this.state.showEditTaskModal
+            editingTask:null
         })
     }
     editTask = (task) => {
         this.setState({
             editingTask: task,
-            showEditTaskModal: true
         })
     }
     onEdit = (editedTask) => {
@@ -102,13 +101,12 @@ class ToDo extends Component {
         })
         this.setState({
             tasks,
-            showEditTaskModal: !this.state.showEditTaskModal,
             editingTask:null
         })
     }
 
     render() {
-        const { tasks, selectedTasksId, showModal, showAddTaskModal, showEditTaskModal } = this.state;
+        const { tasks, selectedTasksId, showModal, showAddTaskModal, editingTask } = this.state;
         const taskComponents = tasks.map((task) => {
             return (
                 <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={3}>
@@ -169,7 +167,7 @@ class ToDo extends Component {
                         onClose={this.toggleOpenNewTaskModal}
                     />
                 }
-                {showEditTaskModal &&
+                {editingTask &&
                     <EditTask
                         onEdit={this.onEdit}
                         editingTask={this.state.editingTask}

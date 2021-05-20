@@ -5,11 +5,10 @@ import { FormControl, Button, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 class EditTask extends Component {
-
-    static propTypes = {
+    componentDidUpdate(){
+        console.log("EditTask componentDidUpdate");
        
-    };
-
+           }
     state = {
        ...this.props.editingTask
         

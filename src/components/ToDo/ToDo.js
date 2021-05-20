@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent  } from 'react';
 import styles from './style.module.css'
 import { Container, Col, Row, Button } from 'react-bootstrap';
 import Task from '../Task/Task';
@@ -7,7 +7,11 @@ import Confirm from '../Confirm';
 import EditTask from '../EditTask/EditTask';
 
 
-class ToDo extends Component {
+class ToDo extends PureComponent  {
+    componentDidUpdate(){
+ console.log("ToDo componentDidUpdate");
+
+    }
     state = {
         tasks: [],
         selectedTasksId: new Set(),

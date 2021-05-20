@@ -5,6 +5,10 @@ import idGenerator from '../../helpers/idGenerator';
 import PropTypes from 'prop-types';
 
 class TaskInput extends Component {
+    componentDidUpdate(){
+        console.log("TaskInput componentDidUpdate");
+       
+           }
 
     static propTypes = {
         onAdd: PropTypes.func.isRequired

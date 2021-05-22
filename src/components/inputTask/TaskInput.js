@@ -11,7 +11,8 @@ class TaskInput extends Component {
            }
 
     static propTypes = {
-        onAdd: PropTypes.func.isRequired
+        onAdd: PropTypes.func.isRequired,
+        onClose:PropTypes.func.isRequired
     };
 
     state = {

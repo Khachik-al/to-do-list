@@ -1,4 +1,4 @@
-import React, { PureComponent  } from 'react';
+import React, { PureComponent } from 'react';
 import styles from './style.module.css'
 import { Container, Col, Row, Button } from 'react-bootstrap';
 import Task from '../Task/Task';
@@ -7,35 +7,106 @@ import Confirm from '../Confirm';
 import EditTask from '../EditTask/EditTask';
 
 
-class ToDo extends PureComponent  {
-    componentDidUpdate(){
- console.log("ToDo componentDidUpdate");
+class ToDo extends PureComponent {
 
-    }
     state = {
         tasks: [],
         selectedTasksId: new Set(),
         showModal: false,
         showAddTaskModal: false,
         editingTask: null,
-        
+
+    }
+    componentDidMount() {
+        fetch('http://localhost:3001/task', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(async (response) => {
+                let task = await response.json();
+                if (response.status >= 400 && response.status < 600) {
+                    if (task.error) {
+                        throw task.error
+                    }
+                    else {
+                        throw new Error('Somthing went wrong');
+                    }
+                }
+                this.setState({
+                    tasks: task
+                })
+
+            })
+            .catch((error) => {
+                console.log("error ", error);
+
+            })
     }
 
     onAdd = (newTask) => {
-        let tasks = [...this.state.tasks, newTask];
-        this.setState({
-            tasks,
-            showAddTaskModal: false
+        fetch('http://localhost:3001/task', {
+            method: 'POST',
+            body: JSON.stringify(newTask),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
+            .then(async (response) => {
+                let task = await response.json();
+                if (response.status >= 400 && response.status < 600) {
+                    if (task.error) {
+                        throw task.error
+                    }
+                    else {
+                        throw new Error('Somthing went wrong');
+                    }
+                }
+                let tasks = [...this.state.tasks, task];
+                this.setState({
+                    tasks,
+                    showAddTaskModal: false
+                })
+
+
+            })
+            .catch((error) => {
+                console.log("error ", error);
+
+            })
+
     }
     deleteTask = (taskId) => {
-        let newSet = this.state.selectedTasksId;
-        newSet.delete(taskId);
-        this.setState({
-            tasks: this.state.tasks.filter((el) => taskId !== el._id),
-            selectedTasksId: newSet,
-            editingTask: null
+        fetch(`http://localhost:3001/task/${taskId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
+            .then(async (response) => {
+                let task = await response.json();
+
+                if (response.status >= 400 && response.status < 600) {
+                    if (task.error) {
+                        throw task.error
+                    }
+                    else {
+                        throw new Error('Somthing went wrong');
+                    }
+                }
+                let newSet = this.state.selectedTasksId;
+                newSet.delete(taskId);
+                this.setState({
+                    tasks:task.filter((el) => taskId !== el._id),
+                    selectedTasksId: newSet,
+                }) 
+            })
+            .catch((error) => {
+                console.log("error ", error);
+
+            })
+
     }
     selectTasks = (taskId) => {
         let selectedTasksId = new Set(this.state.selectedTasksId)
@@ -85,7 +156,7 @@ class ToDo extends PureComponent  {
     }
     toggleOpenEditTaskModal = () => {
         this.setState({
-            editingTask:null
+            editingTask: null
         })
     }
     editTask = (task) => {
@@ -95,17 +166,17 @@ class ToDo extends PureComponent  {
     }
     onEdit = (editedTask) => {
         let tasks = this.state.tasks.map((el) => {
-            if (el._id === editedTask._id){
-              return {
-               ...editedTask
-              } 
-                
+            if (el._id === editedTask._id) {
+                return {
+                    ...editedTask
+                }
+
             }
             return el;
         })
         this.setState({
             tasks,
-            editingTask:null
+            editingTask: null
         })
     }
 

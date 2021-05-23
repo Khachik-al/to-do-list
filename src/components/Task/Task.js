@@ -6,14 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 class Task extends PureComponent  {
-    componentDidMount(){
- console.log("Task componentDidMount ");
-        
-    }
-    componentDidUpdate(){
-        console.log("Task componentDidUpdate");
-       
-           }
+    
 
 
 

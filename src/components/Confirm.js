@@ -3,7 +3,7 @@ import { Modal, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 function Confirm(props) {
-    console.log('Confirm render');
+   
 
     return (
         <Modal

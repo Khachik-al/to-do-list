@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { FormControl, Button, Modal } from 'react-bootstrap';
 // import styles from './styleInputGroup.module.css';
-import idGenerator from '../../helpers/idGenerator';
+//import idGenerator from '../../helpers/idGenerator';
 import PropTypes from 'prop-types';
 
 class TaskInput extends Component {
-    componentDidUpdate(){
-        console.log("TaskInput componentDidUpdate");
-       
-           }
+    
 
     static propTypes = {
         onAdd: PropTypes.func.isRequired,
@@ -33,15 +30,14 @@ class TaskInput extends Component {
         const newTask = {
             title,
             description,
-            _id: idGenerator()
         }
         this.props.onAdd(newTask)
 
-    }
+    };
     addTaskKyeDown = (ev) => {
         if (ev.key !== 'Enter') { return; }
         this.addTask()
-    }
+    };
 
     render() {
         let { title } = this.state;

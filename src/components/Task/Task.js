@@ -1,12 +1,14 @@
-import React, {  PureComponent  } from 'react';
+import React, { PureComponent } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import styles from './taskStyle.module.css';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { formatDate } from '../../helpers/utils';
 
-class Task extends PureComponent  {
-    
+
+class Task extends PureComponent {
+
 
 
 
@@ -28,13 +30,17 @@ class Task extends PureComponent  {
                     />
                     <Card.Title className='mt-1'>{task.title}</Card.Title>
                     <Card.Text>
-                        {task.description}
+                        Description: {task.description}
                     </Card.Text>
+                    <Card.Text>
+                        Date: {formatDate(task.date)}
+                    </Card.Text>
+
                     <Button
                         variant="warning"
-                        className='m-1' 
-                        onClick={()=>editTask(task)}
-                        >
+                        className='m-1'
+                        onClick={() => editTask(task)}
+                    >
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                     <Button

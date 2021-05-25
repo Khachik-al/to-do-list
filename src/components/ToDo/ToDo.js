@@ -12,7 +12,7 @@ class ToDo extends PureComponent {
     state = {
         tasks: [],
         selectedTasksId: new Set(),
-        showModal: false,
+        showConfirm: false,
         showAddTaskModal: false,
         editingTask: null,
 
@@ -98,7 +98,7 @@ class ToDo extends PureComponent {
                 let newSet = this.state.selectedTasksId;
                 newSet.delete(taskId);
                 this.setState({
-                    tasks:task.filter((el) => taskId !== el._id),
+                    tasks:this.state.tasks.filter((el) => taskId !== el._id),
                     selectedTasksId: newSet,
                 }) 
             })
@@ -116,23 +116,52 @@ class ToDo extends PureComponent {
         });
     };
     deleteSelectedTasks = () => {
-        let { selectedTasksId, tasks } = this.state;
-        let newTasks = tasks.filter((task) => {
-            if (selectedTasksId.has(task._id)) {
-                return false;
+        fetch(`http://localhost:3001/task/`, {
+            method: 'PATCH',
+            body: JSON.stringify({tasks:Array.from(this.state.selectedTasksId)}),
+            headers: {
+                'Content-Type': 'application/json'
             }
-            else { return true }
         })
-        this.setState({
-            tasks: newTasks,
-            showModal: !this.state.showModal,
-            selectedTasksId: new Set()
-        })
+            .then(async (response) => {
+                let res = await response.json();
+
+                if (response.status >= 400 && response.status < 600) {
+                    if (res.error) {
+                        throw res.error
+                    }
+                    else {
+                        throw new Error('Somthing went wrong');
+                    }
+                }
+
+
+                let { selectedTasksId, tasks } = this.state;
+                let newTasks = tasks.filter((task) => {
+                    if (selectedTasksId.has(task._id)) {
+                        return false;
+                    }
+                    else { return true }
+                })
+                this.setState({
+                    tasks: newTasks,
+                    showConfirm: !this.state.showConfirm,
+                    selectedTasksId: new Set()
+                })
+
+
+            })
+            .catch((error) => {
+                console.log("error ", error);
+
+            })
+
+
 
     }
     onToggleCloseModal = () => {
         this.setState({
-            showModal: !this.state.showModal
+            showConfirm: !this.state.showConfirm
         })
     }
 
@@ -165,23 +194,49 @@ class ToDo extends PureComponent {
         })
     }
     onEdit = (editedTask) => {
-        let tasks = this.state.tasks.map((el) => {
-            if (el._id === editedTask._id) {
-                return {
-                    ...editedTask
+        fetch(`http://localhost:3001/task/${editedTask._id}`, {
+            method: 'PUT',
+            body: JSON.stringify({...editedTask}),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(async (response) => {
+                let res = await response.json();
+
+                if (response.status >= 400 && response.status < 600) {
+                    if (res.error) {
+                        throw res.error
+                    }
+                    else {
+                        throw new Error('Somthing went wrong');
+                    }
                 }
 
-            }
-            return el;
-        })
-        this.setState({
-            tasks,
-            editingTask: null
-        })
+                let tasks = this.state.tasks.map((el) => {
+                    if (el._id === editedTask._id) {
+                        return {
+                            ...editedTask
+                        }
+        
+                    }
+                    return el;
+                })
+                this.setState({
+                    tasks,
+                    editingTask: null
+                })
+               
+            })
+            .catch((error) => {
+                console.log("error ", error);
+
+            })
+        
     }
 
     render() {
-        const { tasks, selectedTasksId, showModal, showAddTaskModal, editingTask } = this.state;
+        const { tasks, selectedTasksId, showConfirm, showAddTaskModal, editingTask } = this.state;
         const taskComponents = tasks.map((task) => {
             return (
                 <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={3}>
@@ -229,7 +284,7 @@ class ToDo extends PureComponent {
                         {taskComponents}
                     </Row>
                 </Container>
-                {showModal &&
+                {showConfirm &&
                     <Confirm
                         onClose={this.onToggleCloseModal}
                         count={selectedTasksId.size}

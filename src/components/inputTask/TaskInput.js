@@ -3,18 +3,22 @@ import { FormControl, Button, Modal } from 'react-bootstrap';
 // import styles from './styleInputGroup.module.css';
 //import idGenerator from '../../helpers/idGenerator';
 import PropTypes from 'prop-types';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { formatDate } from '../../helpers/utils';
 
 class TaskInput extends Component {
-    
+
 
     static propTypes = {
         onAdd: PropTypes.func.isRequired,
-        onClose:PropTypes.func.isRequired
+        onClose: PropTypes.func.isRequired
     };
 
     state = {
         title: '',
-        description: ''
+        description: '',
+        date: new Date()
     };
 
     handleChenge = (event) => {
@@ -23,13 +27,20 @@ class TaskInput extends Component {
             [name]: value
         })
     };
+    handleChengeDate = (value) => {
+        this.setState({
+            date: value || new Date()
+        })
+    }
     addTask = () => {
         let title = this.state.title.trim();
         let description = this.state.description.trim();
+        let date = formatDate(this.state.date.toISOString());
         if (!title) { return; }
         const newTask = {
             title,
             description,
+            date
         }
         this.props.onAdd(newTask)
 
@@ -67,6 +78,11 @@ class TaskInput extends Component {
                         as="textarea" rows={5} name='description'
                         onChange={this.handleChenge} placeholder='description'
                     />
+                    <DatePicker
+                        minDate={new Date()}
+                        selected={this.state.date}
+                        onChange={this.handleChengeDate} 
+                        className="mt-3"/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant='success' onClick={this.addTask}>Add</Button>

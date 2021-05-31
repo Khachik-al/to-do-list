@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormControl, Button, Modal } from 'react-bootstrap';
-// import styles from './styleInputGroup.module.css';
+import styles from './styleInputGroup.module.css';
 //import idGenerator from '../../helpers/idGenerator';
 import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
@@ -82,7 +82,7 @@ class TaskInput extends Component {
                         minDate={new Date()}
                         selected={this.state.date}
                         onChange={this.handleChengeDate} 
-                        className="mt-3"/>
+                        className={`${styles.datePicker} mt-3`}/>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant='success' onClick={this.addTask}>Add</Button>

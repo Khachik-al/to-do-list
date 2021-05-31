@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import styles from './style.module.css'
 import { Container, Col, Row, Button } from 'react-bootstrap';
-import Task from '../Task/Task';
-import TaskInput from '../inputTask/TaskInput';
-import Confirm from '../Confirm';
-import EditTask from '../EditTask/EditTask';
+import Task from '../../Task/Task';
+import TaskInput from '../../inputTask/TaskInput';
+import Confirm from '../../Confirm';
+import EditTask from '../../EditTask/EditTask';
 
 
 class ToDo extends PureComponent {
@@ -253,8 +253,8 @@ class ToDo extends PureComponent {
 
         return (
             <div>
-                <h2>To Do List</h2>
-                <Container >
+                
+                <Container  className="mt-3">
                     <Row className='justify-content-center '>
                         {tasks.length ?
                             <Col xs={4} className={styles.deleteSelectedButton}>

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { formatDate } from '../../helpers/utils';
+import { Link } from 'react-router-dom';
 
 
 class Task extends PureComponent {
@@ -28,7 +29,11 @@ class Task extends PureComponent {
                     <input type="checkbox" style={{ transform: 'scale(1.3)' }}
                         onChange={this.onselectTasks} checked={selected}
                     />
+                    <Link 
+                    to='/task'
+                    className={styles.link} >
                     <Card.Title className='mt-1'>{task.title}</Card.Title>
+                    </Link>
                     <Card.Text>
                         Description: {task.description}
                     </Card.Text>

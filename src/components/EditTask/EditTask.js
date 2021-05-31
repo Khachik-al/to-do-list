@@ -3,6 +3,7 @@ import { FormControl, Button, Modal } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { formatDate } from '../../helpers/utils';
+import styles from './styleEditTask.module.css';
 import PropTypes from 'prop-types';
 
 class EditTask extends Component {
@@ -78,7 +79,7 @@ class EditTask extends Component {
                         minDate={new Date()}
                         selected={this.state.date}
                         onChange={this.handleChengeDate}
-                        className="mt-3" />
+                        className={`${styles.datePicker} mt-3`} />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant='success' onClick={this.editTask}>Edit</Button>

@@ -78,6 +78,8 @@ class ToDo extends PureComponent {
 
     }
     deleteTask = (taskId) => {
+ console.log( taskId);
+
         fetch(`http://localhost:3001/task/${taskId}`, {
             method: 'DELETE',
             headers: {
@@ -250,7 +252,7 @@ class ToDo extends PureComponent {
                 </Col>
             )
         })
-
+        
         return (
             <div>
                 

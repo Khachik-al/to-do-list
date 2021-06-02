@@ -4,7 +4,7 @@ import styles from './taskStyle.module.css';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import { formatDate } from '../../helpers/utils';
+import { formatDate, textTruncate } from '../../helpers/utils';
 import { Link } from 'react-router-dom';
 
 
@@ -30,12 +30,12 @@ class Task extends PureComponent {
                         onChange={this.onselectTasks} checked={selected}
                     />
                     <Link 
-                    to='/task'
+                    to={`/task/${task._id}`}
                     className={styles.link} >
-                    <Card.Title className='mt-1'>{task.title}</Card.Title>
+                    <Card.Title className='mt-1'>{textTruncate(task.title,25)}</Card.Title>
                     </Link>
                     <Card.Text>
-                        Description: {task.description}
+                        Description: {textTruncate(task.description,60)}
                     </Card.Text>
                     <Card.Text>
                         Date: {formatDate(task.date)}

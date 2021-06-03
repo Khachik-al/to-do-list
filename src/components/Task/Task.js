@@ -1,12 +1,15 @@
-import React, {  PureComponent  } from 'react';
+import React, { PureComponent } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import styles from './taskStyle.module.css';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { formatDate, textTruncate } from '../../helpers/utils';
+import { Link } from 'react-router-dom';
 
-class Task extends PureComponent  {
-    
+
+class Task extends PureComponent {
+
 
 
 
@@ -26,15 +29,23 @@ class Task extends PureComponent  {
                     <input type="checkbox" style={{ transform: 'scale(1.3)' }}
                         onChange={this.onselectTasks} checked={selected}
                     />
-                    <Card.Title className='mt-1'>{task.title}</Card.Title>
+                    <Link 
+                    to={`/task/${task._id}`}
+                    className={styles.link} >
+                    <Card.Title className='mt-1'>{textTruncate(task.title,25)}</Card.Title>
+                    </Link>
                     <Card.Text>
-                        {task.description}
+                        Description: {textTruncate(task.description,60)}
                     </Card.Text>
+                    <Card.Text>
+                        Date: {formatDate(task.date)}
+                    </Card.Text>
+
                     <Button
                         variant="warning"
-                        className='m-1' 
-                        onClick={()=>editTask(task)}
-                        >
+                        className='m-1'
+                        onClick={() => editTask(task)}
+                    >
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
                     <Button

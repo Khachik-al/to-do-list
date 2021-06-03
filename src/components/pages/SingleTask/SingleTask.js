@@ -42,7 +42,6 @@ export default class SingleTask extends Component {
 
     }
     deleteTask = () => {
-        console.log(this.state.task._id);
         fetch(`http://localhost:3001/task/${this.state.task._id}`, {
             method: 'DELETE',
             headers: {

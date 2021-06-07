@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { FormControl, Button, Modal } from 'react-bootstrap';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,12 +7,19 @@ import styles from './styleEditTask.module.css';
 import PropTypes from 'prop-types';
 
 class EditTask extends Component {
+    constructor(props){
+        super(props)
+        this.titleInputRef=createRef()
+    }
 
     state = {
         ...this.props.editingTask,
         date: new Date(this.props.editingTask.date)
 
     };
+    componentDidMount(){
+        this.titleInputRef.current.focus()
+    }
 
     handleChenge = (event) => {
         let { value, name } = event.target;
@@ -69,6 +76,7 @@ class EditTask extends Component {
                         name="title"
                         placeholder="Title"
                         className="mb-3"
+                        ref={this.titleInputRef}
                     />
                     <FormControl
                         as="textarea" rows={5} name='description'

@@ -12,10 +12,6 @@ import SingleTask from './components/pages/SingleTask/SingleTask';
 
 
 
-
-
-
-
 function App() {
   return (
     <div className="App">

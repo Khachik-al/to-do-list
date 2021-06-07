@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,createRef} from 'react';
 import { FormControl, Button, Modal } from 'react-bootstrap';
 import styles from './styleInputGroup.module.css';
 //import idGenerator from '../../helpers/idGenerator';
@@ -8,6 +8,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { formatDate } from '../../helpers/utils';
 
 class TaskInput extends Component {
+    constructor(props){
+        super(props)
+        this.titleInputRef=createRef();
+    }
 
 
     static propTypes = {
@@ -20,6 +24,11 @@ class TaskInput extends Component {
         description: '',
         date: new Date()
     };
+
+    componentDidMount(){
+        this.titleInputRef.current.focus()
+    }
+   
 
     handleChenge = (event) => {
         let { value, name } = event.target;
@@ -51,6 +60,8 @@ class TaskInput extends Component {
     };
 
     render() {
+        
+        
         let { title } = this.state;
         const { onClose } = this.props
         return (
@@ -73,6 +84,7 @@ class TaskInput extends Component {
                         name="title"
                         placeholder="Title"
                         className="mb-3"
+                        ref={this.titleInputRef}
                     />
                     <FormControl
                         as="textarea" rows={5} name='description'

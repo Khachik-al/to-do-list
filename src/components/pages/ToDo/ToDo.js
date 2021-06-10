@@ -78,7 +78,7 @@ class ToDo extends PureComponent {
 
     }
     deleteTask = (taskId) => {
- console.log( taskId);
+
 
         fetch(`http://localhost:3001/task/${taskId}`, {
             method: 'DELETE',
@@ -257,7 +257,7 @@ class ToDo extends PureComponent {
             <div>
                 
                 <Container  className="mt-3">
-                    <Row className='justify-content-center '>
+                    <Row className='justify-content-center'>
                         {tasks.length ?
                             <Col xs={4} className={styles.deleteSelectedButton}>
                                 <Button variant="danger" onClick={this.onToggleCloseModal}

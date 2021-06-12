@@ -26,7 +26,7 @@ export default function Contact() {
         }
 
         if (name === 'email' && value) {
-            if (!/^[\w-]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) {
+            if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value)) {
                 setErrors({ ...errors, email: 'Invalid email' })
             }
         }
@@ -55,8 +55,6 @@ export default function Contact() {
                             throw new Error('Somthing went wrong');
                         }
                     }
-
-                    console.log('all is ok');
                     setValues({
                         name: '',
                         email: '',

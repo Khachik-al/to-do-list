@@ -34,6 +34,7 @@ class EditTask extends Component {
         let date = formatDate(this.state.date.toISOString());
         if (!title) { return; }
         const editedTask = {
+            ...this.state,
             title,
             description,
             _id,

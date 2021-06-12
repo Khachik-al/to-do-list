@@ -14,10 +14,7 @@ import SingleTask from './components/pages/SingleTask/SingleTask';
 
 function App() {
   return (
-    <div className="App">
-    
-
-
+    <div className="App"> 
       <BrowserRouter>
         <NavMenu mb={2} />
         <Switch>
@@ -47,15 +44,9 @@ function App() {
             path='/not-found'
             component={NotFound}
           />
-          
-
           <Redirect to='/not-found' />
         </Switch>
-
-
       </BrowserRouter>
-
-
     </div>
   );
 }

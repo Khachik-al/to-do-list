@@ -8,7 +8,7 @@ export default function NavMenu() {
 
     return (
 
-        <Navbar bg="dark" variant="dark" >
+        <Navbar bg="dark" variant="dark" className="sticky-top" >
             <Navbar.Brand href="/home">To Do List</Navbar.Brand>
             <Nav className="mr-auto">
                 <NavLink

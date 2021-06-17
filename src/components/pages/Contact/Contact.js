@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import styles from './styleContact.module.css'
-
+//?
 export default function Contact() {
 
     let [values, setValues] = useState({
@@ -30,7 +30,6 @@ export default function Contact() {
                 setErrors({ ...errors, email: 'Invalid email' })
             }
         }
-
         setValues({ ...values, [name]: value })
     }
 
@@ -55,7 +54,7 @@ export default function Contact() {
                             throw new Error('Somthing went wrong');
                         }
                     }
-                    setValues({
+                    setValues({//?
                         name: '',
                         email: '',
                         message: ''
@@ -63,7 +62,6 @@ export default function Contact() {
                 })
                 .catch((error) => {
                     console.log("error ", error);
-
                 })
             return;
         }
@@ -74,16 +72,6 @@ export default function Contact() {
                 message: 'Fieled is reqired'
             })
         }
-
-
-
-
-
-
-
-
-
-
     }
 
     return (

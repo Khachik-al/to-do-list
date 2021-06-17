@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { formatDate, textTruncate } from '../../helpers/utils';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { editTaskToggle } from '../../store/actions';
 
 
 class Task extends PureComponent {
@@ -22,7 +24,7 @@ class Task extends PureComponent {
 
     render() {
         const task = this.props.data;
-        const { deleteTask, selected, editTask } = this.props;
+        const { deleteTask, selected, editTaskToggle } = this.props;
         return (
             <Card className={`${styles.task} ${selected ? styles.selected : ''} mt-5`}>
                 <Card.Body>
@@ -44,7 +46,7 @@ class Task extends PureComponent {
                     <Button
                         variant="warning"
                         className='m-1'
-                        onClick={() => editTask(task)}
+                        onClick={() => editTaskToggle(task)}
                     >
                         <FontAwesomeIcon icon={faEdit} />
                     </Button>
@@ -65,5 +67,16 @@ Task.propTypes = {
     deleteTask: PropTypes.func.isRequired,
 };
 
-export default Task;
+
+function mapStateToProps(state) {
+    return {
+        tasks: state.tasks
+    }
+}
+let mapDispatchtoProps = {
+    editTaskToggle
+}
+
+export default connect(mapStateToProps, mapDispatchtoProps)(Task);
+
 

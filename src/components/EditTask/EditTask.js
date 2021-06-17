@@ -5,11 +5,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import { formatDate } from '../../helpers/utils';
 import styles from './styleEditTask.module.css';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { editTasks } from '../../store/actions';
 
 class EditTask extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.titleInputRef=createRef()
+        this.titleInputRef = createRef()
     }
 
     state = {
@@ -17,7 +19,7 @@ class EditTask extends Component {
         date: new Date(this.props.editingTask.date)
 
     };
-    componentDidMount(){
+    componentDidMount() {
         this.titleInputRef.current.focus()
     }
 
@@ -30,22 +32,20 @@ class EditTask extends Component {
     editTask = () => {
         let title = this.state.title.trim();
         let description = this.state.description.trim();
-        let _id = this.state._id;
         let date = formatDate(this.state.date.toISOString());
         if (!title) { return; }
         const editedTask = {
             ...this.state,
             title,
             description,
-            _id,
             date
         }
-        this.props.onEdit(editedTask)
+        this.props.editTasks(editedTask, this.props.tasks)
 
     }
     EditTaskKyeDown = (ev) => {
         if (ev.key !== 'Enter') { return; }
-        this.addTask()
+        this.editTask()
     }
     handleChengeDate = (value) => {
         this.setState({
@@ -54,7 +54,7 @@ class EditTask extends Component {
     }
 
     render() {
-        let { title, description } = this.state;
+        let { title, description, date } = this.state;
         const { onClose } = this.props
         return (
 
@@ -68,7 +68,7 @@ class EditTask extends Component {
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
                         Edit task
-                </Modal.Title>
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <FormControl
@@ -86,7 +86,7 @@ class EditTask extends Component {
                     />
                     <DatePicker
                         minDate={new Date()}
-                        selected={this.state.date}
+                        selected={date}
                         onChange={this.handleChengeDate}
                         className={`${styles.datePicker} mt-3`} />
                 </Modal.Body>
@@ -101,10 +101,18 @@ class EditTask extends Component {
 }
 
 EditTask.propTypes = {
-    onEdit: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-    editingTask: PropTypes.object.isRequired
 };
 
+function mapStateToProps(state) {
+    return {
+        tasks: state.tasks,
+        editingTask: state.editingTask
+    }
+}
+let mapDispatchtoProps = {
+    editTasks
+}
 
-export default EditTask;
+export default connect(mapStateToProps, mapDispatchtoProps)(EditTask);
+

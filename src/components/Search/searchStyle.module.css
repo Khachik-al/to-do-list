@@ -3,6 +3,12 @@
     border-radius: 4px;
     text-align: center;
     font-size: 16px;
-    border: 1px solid rgb(133, 133, 133);
+    border: 1px solid #858585;
     border-image: initial;
+}
+.dateContainer{
+    text-align : right;
+}
+.dateSpan{
+    color: white;
 }

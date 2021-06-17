@@ -5,121 +5,31 @@ import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import styles from '../../Task/taskStyle.module.css';
 import { formatDate } from '../../../helpers/utils';
 import EditTask from '../../EditTask/EditTask';
+import { connect } from 'react-redux';
+import {  deleteTask, editTaskToggle,getSingleTask } from '../../../store/actions';
+//?
 
-
-export default class SingleTask extends Component {
-    state = {
-        task: null,
-        openEditModal: false
-    }
+class SingleTask extends Component {
+   
     componentDidMount() {
         const taskId = this.props.match.params.taskId
-        fetch(`http://localhost:3001/task/${taskId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(async (response) => {
-                let task = await response.json();
-                if (response.status >= 400 && response.status < 600) {
-                    if (task.error) {
-                        throw task.error
-                    }
-                    else {
-                        throw new Error('Somthing went wrong');
-                    }
-                }
-                this.setState({
-                    task,
-                })
-
-            })
-            .catch((error) => {
-                console.log("error ", error);
-
-            })
+        this.props.getSingleTask(taskId)
 
     }
     deleteTask = () => {
-        fetch(`http://localhost:3001/task/${this.state.task._id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(async (response) => {
-                let task = await response.json();
-
-                if (response.status >= 400 && response.status < 600) {
-                    if (task.error) {
-                        throw task.error
-                    }
-                    else {
-                        throw new Error('Somthing went wrong');
-                    }
-                }
-                this.props.history.push('/')
-            })
-
-
-            .catch((error) => {
-                console.log("error ", error);
-
-            })
-    }
-    onEdit=(editedTask)=>{
-
-        fetch(`http://localhost:3001/task/${editedTask._id}`, {
-            method: 'PUT',
-            body: JSON.stringify({...editedTask}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(async (response) => {
-                let res = await response.json();
-
-                if (response.status >= 400 && response.status < 600) {
-                    if (res.error) {
-                        throw res.error
-                    }
-                    else {
-                        throw new Error('Somthing went wrong');
-                    }
-                }
-
-                let task = editedTask;
-                this.setState({
-                    task,
-                    openEditModal: null
-                })
-               
-            })
-            .catch((error) => {
-                console.log("error ", error);
-
-            })
+        this.props.deleteTask(this.props.task._id)
+        //?
+            this.props.history.push('/')
         
-    }
-    editTask = () => {
-        this.setState({
-            openEditModal: !this.state.openEditModal
-        })
-    }
-    toggleOpenEditTaskModal = () => {
-        this.setState({
-            openEditModal: !this.state.openEditModal
-        })
-    }
+        
 
-
+    }
+    
     render() {
-        let { task, openEditModal } = this.state
-
+        let { task, editingTask, editTaskToggle } = this.props
 
         return (
-            <>
+            <div>
                 {task ?
                     <Container>
                         <Row className='justify-content-center text-center '>
@@ -136,7 +46,7 @@ export default class SingleTask extends Component {
                                         <Button
                                             variant="warning"
                                             className='m-1'
-                                        onClick={this.editTask}
+                                        onClick={()=>this.props.editTaskToggle(task)}
                                         >
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Button>
@@ -153,16 +63,27 @@ export default class SingleTask extends Component {
                     </Container>
 
                     : ''}
-                {openEditModal &&
+                {editingTask &&
                     <EditTask
-                        onEdit={this.onEdit}
-                        editingTask={this.state.task}
-                        onClose={this.toggleOpenEditTaskModal}
+                        onClose={editTaskToggle}
                     />
-
                 }
-
-            </>
+            </div>
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        task: state.singleTask,
+        editingTask: state.editingTask,
+        errorMessage:state.errorMessage
+    }
+}
+let mapDispatchtoProps = {
+    getSingleTask,
+    deleteTask,
+    editTaskToggle,
+}
+
+export default connect(mapStateToProps, mapDispatchtoProps)(SingleTask);

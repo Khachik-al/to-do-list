@@ -5,32 +5,29 @@ import Task from '../../Task/Task';
 import TaskInput from '../../inputTask/TaskInput';
 import Confirm from '../../Confirm';
 import EditTask from '../../EditTask/EditTask';
+
 import { connect } from 'react-redux';
-import request from '../../../helpers/request';
+import { deleteTask, getTasks, deleteSelected, editTaskToggle } from '../../../store/actions';
+import Search from '../../Search/Search';
 
 
 class ToDo extends PureComponent {
-
     state = {
         selectedTasksId: new Set(),
         showConfirm: false,
         showAddTaskModal: false,
-        editingTask: null,
-
     }
 
     componentDidMount() {
         this.props.getTasks()
     }
-
-
-    onAdd = (newTask) => {
-        this.props.postTask(newTask)
-        this.setState({
-            showAddTaskModal: false
-        })
+    componentDidUpdate(prevProps) {
+        if (!prevProps.addTaskSuccess && this.props.addTaskSuccess) {
+            this.setState({
+                showAddTaskModal: false
+            })
+        }
     }
-
     deleteTask = (taskId) => {
         let newSet = this.state.selectedTasksId;
         newSet.delete(taskId);
@@ -88,39 +85,15 @@ class ToDo extends PureComponent {
             showAddTaskModal: !this.state.showAddTaskModal
         })
     }
-    toggleOpenEditTaskModal = () => {
-        this.setState({
-            editingTask: null
-        })
-    }
-    onEditTask = (task) => {
-        this.setState({
-            editingTask: task,
-        })
-    }
-    onEdit = (editedTask) => {
-        let tasks = this.props.tasks.map((el) => {
-            if (el._id === editedTask._id) {
-                return {
-                    ...editedTask
-                }
-            }
-            return el;
-        })
-        this.props.editTasks(editedTask, tasks)
-        this.setState({
-            editingTask: null
-        })
-    }
 
     render() {
-        const { selectedTasksId, showConfirm, showAddTaskModal, editingTask } = this.state;
-        const { tasks } = this.props
+        const { selectedTasksId, showConfirm, showAddTaskModal } = this.state;
+        const { tasks, editingTask, editTaskToggle } = this.props
         const taskComponents = tasks.map((task) => {
             return (
                 <Col key={task._id} xs={12} sm={6} md={4} lg={3} xl={3}>
                     <Task
-                        editTask={this.onEditTask}
+                        editTask={this.props.editTasks}
                         data={task}
                         selectTasks={this.selectTasks}
                         deleteTask={this.deleteTask}
@@ -130,8 +103,13 @@ class ToDo extends PureComponent {
             )
         })
         return (
-            <div>
+            <div className={styles.toDo}>
                 <Container className="mt-3">
+                    <Row className='justify-content-center'>
+                        <Col xs={12} sm={8}>
+                            <Search />
+                        </Col>
+                    </Row>
                     <Row className='justify-content-center'>
                         {tasks.length ?
                             <Col xs={4} className={styles.deleteSelectedButton}>
@@ -168,15 +146,12 @@ class ToDo extends PureComponent {
                 }
                 {showAddTaskModal &&
                     <TaskInput
-                        onAdd={this.onAdd}
                         onClose={this.toggleOpenNewTaskModal}
                     />
                 }
                 {editingTask &&
                     <EditTask
-                        onEdit={this.onEdit}
-                        editingTask={this.state.editingTask}
-                        onClose={this.toggleOpenEditTaskModal}
+                        onClose={editTaskToggle}
                     />
                 }
             </div>
@@ -186,54 +161,17 @@ class ToDo extends PureComponent {
 
 function mapStateToProps(state) {
     return {
-        tasks: state.tasks
+        tasks: state.tasks,
+        addTaskSuccess: state.addTaskSuccess,
+        editingTask: state.editingTask
     }
 }
 
 let mapDispatchtoProps = {
-    getTasks: () => {
-        return (dispatch) => {
-            request('http://localhost:3001/task').then((tasks) => {
-                dispatch({ type: "GET_TASKS", tasks: tasks })
-            })
-        }
-    },
-    postTask: (newTask) => {
-        return (dispatch) => {
-            request('http://localhost:3001/task', 'POST', newTask).then((task) => {
-                dispatch({ type: "POST_TASK", task: task })
-            })
-        }
-    },
-    deleteTask: (taskId) => {
-        return (dispatch) => {
-            request(`http://localhost:3001/task/${taskId}`, 'DELETE').then(() => {
-                dispatch({ type: "DELETE_TASK", taskId: taskId })
-            })
-        }
-    },
-    deleteSelected: (tasks, selectedTasksId) => {
-        return (dispatch) => {
-            request(
-                `http://localhost:3001/task/`,
-                'PATCH',
-                { tasks: Array.from(selectedTasksId) })
-                .then(() => {
-                    dispatch({ type: "DELETE_SELECTED", selectedTasks: tasks })
-                })
-        }
-    },
-    editTasks: (editedTask, tasks) => {
-        return (dispatch) => {
-            request(
-                `http://localhost:3001/task/${editedTask._id}`,
-                'PUT',
-                { ...editedTask })
-                .then(() => {
-                    dispatch({ type: "EDIT_TASK", tasks: tasks })
-                })
-        }
-    },
+    getTasks,
+    deleteTask,
+    deleteSelected,
+    editTaskToggle
 }
 export default connect(mapStateToProps, mapDispatchtoProps)(ToDo);
 

@@ -1,11 +1,12 @@
 import React, { Component,createRef} from 'react';
 import { FormControl, Button, Modal } from 'react-bootstrap';
 import styles from './styleInputGroup.module.css';
-//import idGenerator from '../../helpers/idGenerator';
 import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { formatDate } from '../../helpers/utils';
+import { connect } from 'react-redux';
+import { addTask } from '../../store/actions';
 
 class TaskInput extends Component {
     constructor(props){
@@ -15,7 +16,6 @@ class TaskInput extends Component {
 
 
     static propTypes = {
-        onAdd: PropTypes.func.isRequired,
         onClose: PropTypes.func.isRequired
     };
 
@@ -51,7 +51,7 @@ class TaskInput extends Component {
             description,
             date
         }
-        this.props.onAdd(newTask)
+        this.props.addTask(newTask)
 
     };
     addTaskKyeDown = (ev) => {
@@ -105,5 +105,8 @@ class TaskInput extends Component {
     }
 }
 
+let mapDispatchtoProps={
+    addTask,
+}
 
-export default TaskInput;
+export default connect(null, mapDispatchtoProps)(TaskInput);

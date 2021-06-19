@@ -21,6 +21,7 @@ function Search({ getTasks }) {
         let params = {};
         search && (params.search = search)
         getTasks(params);
+        setSearch('')
     }
     function toggleSearchModal() {
         setShowModal(!showModal)
@@ -38,6 +39,7 @@ function Search({ getTasks }) {
                     aria-describedby="basic-addon2"
                     onChange={handleChangeSearch}
                     onKeyPress={SearchTaskKyeDown}
+                    value={search}
                 />
                 <Button
                     variant="outline-primary"

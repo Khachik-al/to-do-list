@@ -5,7 +5,6 @@ import Task from '../../Task/Task';
 import TaskInput from '../../inputTask/TaskInput';
 import Confirm from '../../Confirm';
 import EditTask from '../../EditTask/EditTask';
-
 import { connect } from 'react-redux';
 import { deleteTask, getTasks, deleteSelected, editTaskToggle } from '../../../store/actions';
 import Search from '../../Search/Search';

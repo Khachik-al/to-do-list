@@ -75,7 +75,7 @@ export default function Contact() {
     }
 
     return (
-        <Container>
+        <Container style={{color: "white"}}>
             <Row>
                 <Col>
                     <Form className={styles.form}>

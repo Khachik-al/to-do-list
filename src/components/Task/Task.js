@@ -13,8 +13,6 @@ import { editTaskToggle } from '../../store/actions';
 class Task extends PureComponent {
 
 
-
-
     onselectTasks = () => {
         this.props.selectTasks(this.props.data._id)
         this.setState({

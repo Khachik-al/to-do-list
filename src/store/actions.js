@@ -6,6 +6,7 @@ let APIHost=process.env.REACT_APP_API_HOST
 export function getTasks(params = {}) {
 
      let query=Object.entries(params).map(([key,value])=>`${key}=${value}`).join('&')
+ console.log(`${APIHost}/task?${query}`);
 
     return (dispatch) => {
         dispatch({ type: PENDING })

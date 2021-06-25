@@ -1,20 +1,25 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import styles from './styleRegistration.module.css'
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { contact } from '../../../store/actions';
-import styles from './styleContact.module.css'
-//?
-function Contact(props) {
+import { register } from '../../../store/actions';
+
+function Registration(props) {
 
     let [values, setValues] = useState({
         name: '',
+        surname: '',
         email: '',
-        message: ''
+        password: '',
+        confirmPassword: ''
     })
     let [errors, setErrors] = useState({
         name: null,
+        surname: null,
         email: null,
-        message: null
+        password: null,
+        confirmPassword: null
     })
     function handleChange({ target: { name, value } }) {
         if (value.trim()) {
@@ -35,25 +40,27 @@ function Contact(props) {
         setValues({ ...values, [name]: value })
     }
 
-    function onSubmit() {
+    function onRegister() {
         let errorsExist = !Object.values(errors).every(el => el === null)
         let valuesExist = !Object.values(values).some(el => el.trim() === '')
-
         if (!errorsExist && valuesExist) {
-
-            props.contact(values)
+            props.register(values)
             setValues({//?
                 name: '',
+                surname: '',
                 email: '',
-                message: ''
+                password: '',
+                confirmPassword: ''
             })
             return;
         }
         if (!errorsExist && !valuesExist) {
             setErrors({
                 name: 'Fieled is reqired',
+                surname: 'Fieled is reqired',
                 email: 'Fieled is reqired',
-                message: 'Fieled is reqired'
+                password: 'Fieled is reqired',
+                confirmPassword: 'Fieled is reqired'
             })
         }
     }
@@ -65,7 +72,7 @@ function Contact(props) {
             <Row className='justify-content-center'>
                 <Col xs={12} sm={8} md={6}>
                     <Form className={styles.form}>
-                        <h2 className='text-center'>Contact us</h2>
+                        <h2 className='text-center'>Registration</h2>
                         <Form.Group >
                             <Form.Label className='mt-2'>Name</Form.Label>
                             <Form.Control
@@ -78,6 +85,20 @@ function Contact(props) {
 
                             <Form.Text className="text-danger">
                                 {errors.name}
+                            </Form.Text>
+                        </Form.Group>
+                        <Form.Group >
+                            <Form.Label className='mt-2'>Surname</Form.Label>
+                            <Form.Control
+                                value={values.surname}
+                                name='surname'
+                                onChange={handleChange}
+                                type="text"
+                                className={errors.surname ? styles.invalid : ''}
+                            />
+
+                            <Form.Text className="text-danger">
+                                {errors.surname}
                             </Form.Text>
                         </Form.Group>
 
@@ -96,27 +117,40 @@ function Contact(props) {
                         </Form.Group>
 
                         <Form.Group >
-                            <Form.Label className='mt-2'>Message</Form.Label>
+                            <Form.Label className='mt-2'>Password</Form.Label>
                             <Form.Control
-                                value={values.message}
-                                name='message'
-                                as="textarea"
-                                rows={3}
+                                value={values.password}
+                                name='password'
+                                type="password"
                                 onChange={handleChange}
-                                className={errors.message ? styles.invalid : ''}
+                                className={errors.password ? styles.invalid : ''}
                             />
                             <Form.Text className="text-danger">
-                                {errors.message}
+                                {errors.password}
                             </Form.Text>
                         </Form.Group>
-
+                        <Form.Group >
+                            <Form.Label className='mt-2'>Confirm password</Form.Label>
+                            <Form.Control
+                                value={values.confirmPassword}
+                                name='confirmPassword'
+                                type="password"
+                                onChange={handleChange}
+                                className={errors.confirmPassword ? styles.invalid : ''}
+                            />
+                            <Form.Text className="text-danger">
+                                {errors.confirmPassword}
+                            </Form.Text>
+                        </Form.Group>
                         <Button
                             variant="primary"
                             className='mt-2'
-                            onClick={onSubmit}
+                            onClick={onRegister}
                         >
-                            Submit
+                            Register
                         </Button>
+                        <br /><br />
+                        <Link to={'/login'}>Alraedy registered? Try to login</Link>
                     </Form>
                 </Col>
             </Row>
@@ -125,8 +159,8 @@ function Contact(props) {
     )
 }
 
-let mapDispatchtoProps = {
-    contact
+let mapDispatchToProps = {
+    register
 }
 
-export default connect(null, mapDispatchtoProps)(Contact)
+export default connect(null, mapDispatchToProps)(Registration)

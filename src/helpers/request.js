@@ -5,7 +5,7 @@
 
 export default function request(url, method = 'GET', body) {
     let config = {
-        method: method,
+        method,
         headers: {
             'Content-Type': 'application/json'
         }

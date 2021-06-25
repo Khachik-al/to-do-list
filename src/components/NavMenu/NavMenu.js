@@ -1,22 +1,26 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { NavLink, Link } from 'react-router-dom';
 import styles from './navMenu.module.css';
 
 
-export default function NavMenu() {
+function NavMenu({ isAuthenticated }) {
 
     return (
 
         <Navbar bg="dark" variant="dark" className="sticky-top" >
             <Navbar.Brand href="/home">To Do List</Navbar.Brand>
             <Nav className="mr-auto">
-                <NavLink
-                    to="/home"
-                    activeClassName={`${styles.active} `}
-                    className={styles.link}
-                >Home
-                </NavLink>
+                {isAuthenticated &&
+                    <NavLink
+                        to="/home"
+                        activeClassName={`${styles.active} `}
+                        className={styles.link}
+                    >Home
+                    </NavLink>
+                }
+
                 <NavLink
                     to="/about"
                     activeClassName={`${styles.active} `}
@@ -29,8 +33,37 @@ export default function NavMenu() {
                     className={styles.link}
                 >Contact us
                 </NavLink>
+                {isAuthenticated ?
+                    <Link variant="primary">
+                        Log out
+                    </Link> :
+                    <>
+                        <NavLink
+                            to="/registration"
+                            activeClassName={`${styles.active} `}
+                            className={styles.link}
+                        >Registration
+                        </NavLink>
+                        <NavLink
+                            to="/login"
+                            activeClassName={`${styles.active} `}
+                            className={styles.link}
+                        >Login
+                        </NavLink>
+                    </>
+                }
+
             </Nav>
         </Navbar>
 
     )
 }
+
+function mapStateToProps(state) {
+    return {
+        isAuthenticated: state.isAuthenticated
+    }
+}
+
+
+export default connect(mapStateToProps)(NavMenu)

@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import styles from './styleLogin.module.css'
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { contact } from '../../../store/actions';
-import styles from './styleContact.module.css'
-//?
-function Contact(props) {
+import { login } from '../../../store/actions';
+
+function Login(props) {
 
     let [values, setValues] = useState({
-        name: '',
         email: '',
-        message: ''
+        password: ''
     })
     let [errors, setErrors] = useState({
-        name: null,
         email: null,
-        message: null
+        password: null
     })
     function handleChange({ target: { name, value } }) {
         if (value.trim()) {
@@ -38,22 +37,21 @@ function Contact(props) {
     function onSubmit() {
         let errorsExist = !Object.values(errors).every(el => el === null)
         let valuesExist = !Object.values(values).some(el => el.trim() === '')
-
         if (!errorsExist && valuesExist) {
 
-            props.contact(values)
+            props.login(values)
             setValues({//?
-                name: '',
                 email: '',
-                message: ''
+                password: ''
             })
+            
             return;
         }
         if (!errorsExist && !valuesExist) {
             setErrors({
-                name: 'Fieled is reqired',
+               
                 email: 'Fieled is reqired',
-                message: 'Fieled is reqired'
+                password: 'Fieled is reqired'
             })
         }
     }
@@ -65,21 +63,8 @@ function Contact(props) {
             <Row className='justify-content-center'>
                 <Col xs={12} sm={8} md={6}>
                     <Form className={styles.form}>
-                        <h2 className='text-center'>Contact us</h2>
-                        <Form.Group >
-                            <Form.Label className='mt-2'>Name</Form.Label>
-                            <Form.Control
-                                value={values.name}
-                                name='name'
-                                onChange={handleChange}
-                                type="text"
-                                className={errors.name ? styles.invalid : ''}
-                            />
+                        <h2 className='text-center'>Login</h2>
 
-                            <Form.Text className="text-danger">
-                                {errors.name}
-                            </Form.Text>
-                        </Form.Group>
 
                         <Form.Group >
                             <Form.Label className='mt-2'>Email address</Form.Label>
@@ -94,19 +79,17 @@ function Contact(props) {
                                 {errors.email}
                             </Form.Text>
                         </Form.Group>
-
                         <Form.Group >
-                            <Form.Label className='mt-2'>Message</Form.Label>
+                            <Form.Label className='mt-2'>Password</Form.Label>
                             <Form.Control
-                                value={values.message}
-                                name='message'
-                                as="textarea"
-                                rows={3}
+                                value={values.password}
+                                name='password'
+                                type="password"
                                 onChange={handleChange}
-                                className={errors.message ? styles.invalid : ''}
+                                className={errors.password ? styles.invalid : ''}
                             />
                             <Form.Text className="text-danger">
-                                {errors.message}
+                                {errors.password}
                             </Form.Text>
                         </Form.Group>
 
@@ -115,8 +98,10 @@ function Contact(props) {
                             className='mt-2'
                             onClick={onSubmit}
                         >
-                            Submit
+                            Login
                         </Button>
+                        <br /><br />
+                        <Link to={'/registration'}>Not registered yet? Register now.</Link>
                     </Form>
                 </Col>
             </Row>
@@ -125,8 +110,8 @@ function Contact(props) {
     )
 }
 
-let mapDispatchtoProps = {
-    contact
+let mapDispatchToProps = {
+    login
 }
 
-export default connect(null, mapDispatchtoProps)(Contact)
+export default connect(null, mapDispatchToProps)(Login)

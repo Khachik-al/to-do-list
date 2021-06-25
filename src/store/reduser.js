@@ -1,10 +1,12 @@
+import { checkLoginStatus } from "../helpers/storage"
 import { PENDING } from "./actionTypes"
 
 const defaultState = {
     tasks: [],
     addTaskSuccess: false,
     successMessage: '',
-    errorMessage: ''
+    errorMessage: '',
+    isAuthenticated: checkLoginStatus()
 }
 
 
@@ -83,6 +85,39 @@ export default function reducer(state = defaultState, action) {
                 ...state,
                 loading: false,
                 errorMessage: action.errorMessage
+            }
+        }
+        case 'ACTIVE_DONE': {
+            return {
+                ...state,
+                successMessage: action.status === 'active' ? 'Congrets bebe' : 'its ok',
+                loading: false,
+
+            }
+        }
+        case 'CONTACT': {
+            return {
+                ...state,
+                successMessage: 'Contact message has sent successfully',
+                loading: false,
+
+            }
+        }
+        case 'REGISTER': {
+            return {
+                ...state,
+                loading: false,
+                successMessage: 'You registered successfully'
+                
+
+            }
+        }
+        case 'SIGHN_IN': {
+            return {
+                ...state,
+                loading: false,
+                successMessage: 'Welcome',
+                isAuthenticated: true
             }
         }
 

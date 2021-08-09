@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import history from './helpers/history';
 import Registration from './components/pages/Registration/Registration';
 import Login from './components/pages/Login/Login';
+import AuthRoute from './components/AuthRoute'
 
 let toastProps = {
   position: "bottom-left",
@@ -26,16 +27,6 @@ let toastProps = {
   draggable: true,
   progress: undefined,
 }
-
-function AuthRoute({ path, component, exact = false }) {
-  return (
-    <Route
-      path={path}
-      component={component}
-      exact={exact} />
-  )
-}
-
 
 function App({ loading, successMessage, errorMessage }) {
 
@@ -50,7 +41,6 @@ function App({ loading, successMessage, errorMessage }) {
     }, [successMessage, errorMessage])
 
   return (
-
     <div className="App">
       <Router history={history}>
         <NavMenu />
@@ -58,34 +48,39 @@ function App({ loading, successMessage, errorMessage }) {
           <AuthRoute
             path='/home'
             component={ToDo}
+            type={'private'}
           />
           <AuthRoute
             path='/'
             component={ToDo}
             exact={true}
+            type={'private'}
           />
           <AuthRoute
             path='/task/:taskId'
             component={SingleTask}
             exact={true}
+            type={'private'}
           />
-          <AuthRoute
+          <Route
             path='/about'
             component={About}
           />
           <AuthRoute
             path='/registration'
             component={Registration}
+            type={'public'}
           />
           <AuthRoute
             path='/login'
             component={Login}
+            type={'public'}
           />
-          <AuthRoute
+          <Route
             path='/contact'
             component={Contact}
           />
-          <AuthRoute
+          <Route
             path='/not-found'
             component={NotFound}
           />

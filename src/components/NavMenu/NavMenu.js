@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from './navMenu.module.css';
 
 
@@ -10,7 +10,7 @@ function NavMenu({ isAuthenticated }) {
     return (
 
         <Navbar bg="dark" variant="dark" className="sticky-top" >
-            <Navbar.Brand href="/home">To Do List</Navbar.Brand>
+            <Navbar.Brand >To Do List</Navbar.Brand>
             <Nav className="mr-auto">
                 {isAuthenticated &&
                     <NavLink
@@ -34,9 +34,16 @@ function NavMenu({ isAuthenticated }) {
                 >Contact us
                 </NavLink>
                 {isAuthenticated ?
-                    <Link variant="primary">
-                        Log out
-                    </Link> :
+                    <NavLink
+                    onClick={()=>{
+                        localStorage.clear()
+                        window.location.reload(false)
+                        }}
+                    to='/home'
+                    activeClassName={`${styles.active} `}
+                    className={styles.link}
+                >Log out
+                </NavLink> :
                     <>
                         <NavLink
                             to="/registration"

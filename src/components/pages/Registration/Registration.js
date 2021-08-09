@@ -65,98 +65,94 @@ function Registration(props) {
         }
     }
 
-    return (
-        <Container
-        style={{color: "white"}}
-        >
-            <Row className='justify-content-center'>
-                <Col xs={12} sm={8} md={6}>
-                    <Form className={styles.form}>
-                        <h2 className='text-center'>Registration</h2>
-                        <Form.Group >
-                            <Form.Label className='mt-2'>Name</Form.Label>
-                            <Form.Control
-                                value={values.name}
-                                name='name'
-                                onChange={handleChange}
-                                type="text"
-                                className={errors.name ? styles.invalid : ''}
-                            />
+    return <Container
+    style={{color: "white"}}
+    >
+        <Row className='justify-content-center'>
+            <Col xs={12} sm={8} md={6}>
+                <Form className={styles.form}>
+                    <h2 className='text-center'>Registration</h2>
+                    <Form.Group >
+                        <Form.Label className='mt-2'>Name</Form.Label>
+                        <Form.Control
+                            value={values.name}
+                            name='name'
+                            onChange={handleChange}
+                            type="text"
+                            className={errors.name ? styles.invalid : ''}
+                        />
+                        <Form.Text className="text-danger">
+                            {errors.name}
+                        </Form.Text>
+                    </Form.Group>
+                    <Form.Group >
+                        <Form.Label className='mt-2'>Surname</Form.Label>
+                        <Form.Control
+                            value={values.surname}
+                            name='surname'
+                            onChange={handleChange}
+                            type="text"
+                            className={errors.surname ? styles.invalid : ''}
+                        />
 
-                            <Form.Text className="text-danger">
-                                {errors.name}
-                            </Form.Text>
-                        </Form.Group>
-                        <Form.Group >
-                            <Form.Label className='mt-2'>Surname</Form.Label>
-                            <Form.Control
-                                value={values.surname}
-                                name='surname'
-                                onChange={handleChange}
-                                type="text"
-                                className={errors.surname ? styles.invalid : ''}
-                            />
+                        <Form.Text className="text-danger">
+                            {errors.surname}
+                        </Form.Text>
+                    </Form.Group>
 
-                            <Form.Text className="text-danger">
-                                {errors.surname}
-                            </Form.Text>
-                        </Form.Group>
+                    <Form.Group >
+                        <Form.Label className='mt-2'>Email address</Form.Label>
+                        <Form.Control
+                            value={values.email}
+                            name='email'
+                            type="email"
+                            onChange={handleChange}
+                            className={errors.email ? styles.invalid : ''}
+                        />
+                        <Form.Text className="text-danger">
+                            {errors.email}
+                        </Form.Text>
+                    </Form.Group>
 
-                        <Form.Group >
-                            <Form.Label className='mt-2'>Email address</Form.Label>
-                            <Form.Control
-                                value={values.email}
-                                name='email'
-                                type="email"
-                                onChange={handleChange}
-                                className={errors.email ? styles.invalid : ''}
-                            />
-                            <Form.Text className="text-danger">
-                                {errors.email}
-                            </Form.Text>
-                        </Form.Group>
-
-                        <Form.Group >
-                            <Form.Label className='mt-2'>Password</Form.Label>
-                            <Form.Control
-                                value={values.password}
-                                name='password'
-                                type="password"
-                                onChange={handleChange}
-                                className={errors.password ? styles.invalid : ''}
-                            />
-                            <Form.Text className="text-danger">
-                                {errors.password}
-                            </Form.Text>
-                        </Form.Group>
-                        <Form.Group >
-                            <Form.Label className='mt-2'>Confirm password</Form.Label>
-                            <Form.Control
-                                value={values.confirmPassword}
-                                name='confirmPassword'
-                                type="password"
-                                onChange={handleChange}
-                                className={errors.confirmPassword ? styles.invalid : ''}
-                            />
-                            <Form.Text className="text-danger">
-                                {errors.confirmPassword}
-                            </Form.Text>
-                        </Form.Group>
-                        <Button
-                            variant="primary"
-                            className='mt-2'
-                            onClick={onRegister}
-                        >
-                            Register
-                        </Button>
-                        <br /><br />
-                        <Link to={'/login'}>Alraedy registered? Try to login</Link>
-                    </Form>
-                </Col>
-            </Row>
-        </Container>
-
-    )
+                    <Form.Group >
+                        <Form.Label className='mt-2'>Password</Form.Label>
+                        <Form.Control
+                            value={values.password}
+                            name='password'
+                            type="password"
+                            onChange={handleChange}
+                            className={errors.password ? styles.invalid : ''}
+                        />
+                        <Form.Text className="text-danger">
+                            {errors.password}
+                        </Form.Text>
+                    </Form.Group>
+                    <Form.Group >
+                        <Form.Label className='mt-2'>Confirm password</Form.Label>
+                        <Form.Control
+                            value={values.confirmPassword}
+                            name='confirmPassword'
+                            type="password"
+                            onChange={handleChange}
+                            className={errors.confirmPassword ? styles.invalid : ''}
+                        />
+                        <Form.Text className="text-danger">
+                            {errors.confirmPassword}
+                        </Form.Text>
+                    </Form.Group>
+                    <Button
+                        variant="primary"
+                        className='mt-2'
+                        onClick={onRegister}
+                    >
+                        Register
+                    </Button>
+                    <br /><br />
+                    <Link to={'/login'}>Alraedy registered? Try to login</Link>
+                </Form>
+            </Col>
+        </Row>
+    </Container>
 }
 
 let mapDispatchToProps = {

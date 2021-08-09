@@ -90,7 +90,8 @@ export default function reducer(state = defaultState, action) {
         case 'ACTIVE_DONE': {
             return {
                 ...state,
-                successMessage: action.status === 'active' ? 'Congrets bebe' : 'its ok',
+                successMessage: 
+                action.status === 'active' ? 'Task is active' : 'Congrets your task is done',
                 loading: false,
 
             }

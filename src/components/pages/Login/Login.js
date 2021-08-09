@@ -44,12 +44,12 @@ function Login(props) {
                 email: '',
                 password: ''
             })
-            
+
             return;
         }
         if (!errorsExist && !valuesExist) {
             setErrors({
-               
+
                 email: 'Fieled is reqired',
                 password: 'Fieled is reqired'
             })
@@ -58,14 +58,13 @@ function Login(props) {
 
     return (
         <Container
-        style={{color: "white"}}
+            style={{ color: "white" }}
+
         >
             <Row className='justify-content-center'>
                 <Col xs={12} sm={8} md={6}>
                     <Form className={styles.form}>
                         <h2 className='text-center'>Login</h2>
-
-
                         <Form.Group >
                             <Form.Label className='mt-2'>Email address</Form.Label>
                             <Form.Control

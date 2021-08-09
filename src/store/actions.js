@@ -113,17 +113,20 @@ export function activeDoneToggle(taskId, status) {
 }
 
 export function register(data) {
+    console.log(data);
     return (dispatch) => {
         dispatch({ type: PENDING })
         request(
             `${APIHost}/user`,
             'POST',
             data)
-            .then(() => {
+            .then((d) => {
+                console.log(d);
                 dispatch({ type: "REGISTER"})
                 history.push('/login')
             })
             .catch((error) => {
+                console.log(error);
                 dispatch({ type: "ERROR", errorMessage: error.message })
             })
     }
@@ -143,7 +146,8 @@ export function contact(data) {
             })
     }
 }
-export function login(data) {
+export function 
+login(data) {
     return (dispatch) => {
         dispatch({ type: PENDING })
         request(
@@ -156,6 +160,7 @@ export function login(data) {
                 history.push('/')
             })
             .catch((error) => {
+                console.log(error);
                 dispatch({ type: "ERROR", errorMessage: error.message })
             })
     }
